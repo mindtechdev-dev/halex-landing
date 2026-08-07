@@ -1,5 +1,12 @@
 ﻿---
 import '../styles/styles.css';
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const appJs  = readFileSync(path.resolve(__dirname, '../../public/app.js'),  'utf8');
+const pageCss = readFileSync(path.resolve(__dirname, '../../public/page.css'), 'utf8');
 ---
 
 <!DOCTYPE html>
@@ -10,7 +17,7 @@ import '../styles/styles.css';
 <title>HALEX – Soluciones reales para tu hogar o negocio</title>
 <meta name="description" content="Obras menores en construcción y servicios: techumbres, gasfitería, pintura, electricidad menor y mantenciones para hogares y negocios." />
 <link rel="icon" href="/assets/halex-logo.png" />
-<link rel="stylesheet" href="/page.css" />
+<style is:inline set:html={pageCss}></style>
 </head>
 <body>
 <div id="root"></div>
@@ -18,6 +25,6 @@ import '../styles/styles.css';
 <script is:inline src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
 <script is:inline src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
 <script is:inline src="/image-slot.js"></script>
-<script type="text/babel" data-presets="react" src="/app.js"></script>
+<script is:inline type="text/babel" data-presets="react" set:html={appJs}></script>
 </body>
 </html>
