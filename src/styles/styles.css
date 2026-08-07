@@ -1,0 +1,297 @@
+/* HALEX design system — global styles */
+
+/* ===== tokens/colors.css ===== */
+/* ============================================================
+   HALEX — Color tokens
+   Premium black + gold. High contrast, corporate, trustworthy.
+   ============================================================ */
+:root {
+  /* --- Brand gold (sampled from the HALEX wordmark) --- */
+  --gold-300: #F6D274;   /* light tint — subtle highlights, hover text */
+  --gold-400: #F2C23B;   /* bright amber */
+  --gold-500: #E8B62E;   /* PRIMARY brand gold */
+  --gold-600: #C9971A;   /* darker — press / borders on light */
+  --gold-700: #A37811;   /* deep amber — text on light gold surfaces */
+
+  /* --- Ink / blacks (the brand background is near-pure black) --- */
+  --ink-950: #060607;    /* page background */
+  --ink-900: #0C0D0F;    /* primary dark surface */
+  --ink-850: #131417;    /* raised dark surface / cards */
+  --ink-800: #1B1D21;    /* card on card, borders-as-fills */
+  --ink-700: #2A2D33;    /* hairline borders on dark */
+  --ink-600: #3A3E46;    /* stronger divider on dark */
+
+  /* --- Neutrals / light side --- */
+  --white:   #FFFFFF;
+  --paper:   #FAFAF7;    /* warm off-white page (light sections) */
+  --paper-2: #F1F0EB;    /* slightly deeper warm neutral */
+  --line:    #E3E1DA;    /* hairline on light */
+  --line-2:  #CFCDC4;    /* stronger divider on light */
+
+  /* --- Text neutrals --- */
+  --gray-100: #EDEDEA;
+  --gray-300: #C6C6C2;
+  --gray-400: #9A9A98;
+  --gray-500: #6E6E6C;
+  --gray-700: #3C3C3A;
+  --gray-900: #18181A;
+
+  /* --- WhatsApp (primary conversion channel) --- */
+  --whatsapp:        #25D366;
+  --whatsapp-600:    #1FB457;
+  --whatsapp-700:    #199948;
+  --whatsapp-ink:    #0A3D1E;
+
+  /* --- Status --- */
+  --success: #2EA160;
+  --warning: #E8B62E;
+  --danger:  #D24B3E;
+
+  /* ========================================================
+     Semantic aliases — prefer these in components
+     ======================================================== */
+
+  /* Surfaces */
+  --surface-page:        var(--ink-950);   /* default dark page */
+  --surface-page-light:  var(--paper);     /* light sections */
+  --surface-card:        var(--ink-850);   /* card on dark */
+  --surface-card-light:  var(--white);     /* card on light */
+  --surface-raised:      var(--ink-800);
+  --surface-inverse:     var(--white);
+
+  /* Text */
+  --text-strong:    var(--white);          /* headings on dark */
+  --text-body:      var(--gray-300);        /* body on dark */
+  --text-muted:     var(--gray-400);        /* secondary on dark */
+  --text-on-light:  var(--gray-900);        /* headings on light */
+  --text-body-light:var(--gray-700);        /* body on light */
+  --text-muted-light:var(--gray-500);       /* secondary on light */
+  --text-gold:      var(--gold-500);        /* accent text */
+  --text-on-gold:   var(--ink-950);         /* text on a gold fill */
+
+  /* Borders */
+  --border-dark:    var(--ink-700);
+  --border-dark-2:  var(--ink-600);
+  --border-light:   var(--line);
+  --border-gold:    color-mix(in oklab, var(--gold-500) 55%, transparent);
+
+  /* Brand */
+  --brand:          var(--gold-500);
+  --brand-hover:    var(--gold-400);
+  --brand-press:    var(--gold-600);
+  --focus-ring:     color-mix(in oklab, var(--gold-500) 70%, transparent);
+}
+
+
+/* ===== tokens/typography.css ===== */
+/* ============================================================
+   HALEX — Typography tokens
+   Display: Archivo (modern technical grotesque — headings, wordmark feel)
+   Body:    Hanken Grotesk (clean humanist sans — UI & copy)
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Families */
+  --font-display: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body:    'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Weights */
+  --fw-regular: 400; /* @kind font */
+  --fw-medium:  500; /* @kind font */
+  --fw-semibold:600; /* @kind font */
+  --fw-bold:    700; /* @kind font */
+  --fw-extra:   800; /* @kind font */
+  --fw-black:   900; /* @kind font */
+
+  /* Fluid display scale (headings use --font-display, uppercase or tight) */
+  --fs-display:  clamp(2.75rem, 1.6rem + 5.2vw, 5rem); /* @kind other */
+  --fs-h1:       clamp(2.25rem, 1.5rem + 3.2vw, 3.5rem); /* @kind other */
+  --fs-h2:       clamp(1.75rem, 1.25rem + 2.1vw, 2.75rem); /* @kind other */
+  --fs-h3:       clamp(1.35rem, 1.1rem + 1vw, 1.75rem); /* @kind other */
+  --fs-h4:       clamp(1.15rem, 1.02rem + 0.5vw, 1.375rem); /* @kind other */
+
+  /* Body scale */
+  --fs-lead:     clamp(1.125rem, 1.02rem + 0.4vw, 1.3125rem); /* @kind other */
+  --fs-body:     1.0625rem; /* @kind other */
+  --fs-sm:       0.9375rem; /* @kind other */
+  --fs-xs:       0.8125rem; /* @kind other */
+
+  /* Eyebrow / label (uppercase, tracked) */
+  --fs-eyebrow:  0.8125rem; /* @kind other */
+
+  /* Line heights */
+  --lh-tight:    1.04; /* @kind other */
+  --lh-snug:     1.18; /* @kind other */
+  --lh-heading:  1.1; /* @kind other */
+  --lh-body:     1.6; /* @kind other */
+  --lh-relaxed:  1.7; /* @kind other */
+
+  /* Letter spacing */
+  --ls-display:  -0.02em; /* @kind other */
+  --ls-heading:  -0.01em; /* @kind other */
+  --ls-normal:   0; /* @kind other */
+  --ls-eyebrow:  0.18em; /* @kind other */
+  --ls-button:   0.04em; /* @kind other */
+}
+
+
+/* ===== tokens/spacing.css ===== */
+/* ============================================================
+   HALEX — Spacing, radius & layout tokens
+   8px base grid. Generous whitespace, wide section rhythm.
+   ============================================================ */
+:root {
+  /* Spacing scale (8px base) */
+  --space-0:  0;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* Section rhythm */
+  --section-y:       clamp(64px, 8vw, 128px); /* @kind spacing */
+  --section-y-sm:    clamp(48px, 6vw, 88px); /* @kind spacing */
+
+  /* Container */
+  --container:       1200px;
+  --container-wide:  1320px;
+  --container-narrow:820px;
+  --gutter:          clamp(20px, 5vw, 56px); /* @kind spacing */
+
+  /* Radius — moderate, corporate (not pill-soft) */
+  --radius-xs:  4px;
+  --radius-sm:  8px;
+  --radius-md:  12px;
+  --radius-lg:  18px;
+  --radius-xl:  24px;
+  --radius-pill:999px;
+
+  /* Border widths */
+  --bw-1: 1px;
+  --bw-2: 2px;
+}
+
+
+/* ===== tokens/effects.css ===== */
+/* ============================================================
+   HALEX — Effects: shadow, glow, transition, gradients
+   On dark surfaces depth comes from subtle gold glow + hairlines,
+   not heavy drop shadows. On light surfaces, soft neutral shadows.
+   ============================================================ */
+:root {
+  /* Shadows on light surfaces */
+  --shadow-sm:  0 1px 2px rgba(20, 18, 10, 0.06), 0 1px 3px rgba(20, 18, 10, 0.08);
+  --shadow-md:  0 4px 12px rgba(20, 18, 10, 0.08), 0 2px 6px rgba(20, 18, 10, 0.06);
+  --shadow-lg:  0 18px 40px rgba(20, 18, 10, 0.12), 0 6px 14px rgba(20, 18, 10, 0.08);
+  --shadow-xl:  0 30px 70px rgba(20, 18, 10, 0.18), 0 10px 24px rgba(20, 18, 10, 0.10);
+
+  /* Depth on dark surfaces — black drop + faint top inner highlight */
+  --shadow-dark:    0 24px 60px rgba(0, 0, 0, 0.55);
+  --shadow-dark-sm: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --inset-hairline: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  /* Gold glow — used sparingly for primary CTAs & active states */
+  --glow-gold:    0 0 0 1px color-mix(in oklab, var(--gold-500) 40%, transparent),
+                  0 10px 30px color-mix(in oklab, var(--gold-500) 22%, transparent);
+  --glow-gold-sm: 0 6px 18px color-mix(in oklab, var(--gold-500) 20%, transparent);
+  --glow-whatsapp:0 8px 24px color-mix(in oklab, var(--whatsapp) 30%, transparent);
+
+  /* Transitions */
+  --ease-out:   cubic-bezier(0.22, 1, 0.36, 1); /* @kind other */
+  --ease-in-out:cubic-bezier(0.65, 0, 0.35, 1); /* @kind other */
+  --dur-fast:   140ms; /* @kind other */
+  --dur-base:   220ms; /* @kind other */
+  --dur-slow:   380ms; /* @kind other */
+
+  /* Gradients & overlays */
+  --grad-gold:        linear-gradient(135deg, var(--gold-400) 0%, var(--gold-600) 100%); /* @kind other */
+  --grad-gold-soft:   linear-gradient(135deg, var(--gold-300) 0%, var(--gold-500) 100%); /* @kind other */
+  /* Protection scrim for text over photography (dark) */
+  --scrim-bottom:     linear-gradient(180deg, rgba(6,6,7,0) 0%, rgba(6,6,7,0.35) 45%, rgba(6,6,7,0.92) 100%); /* @kind other */
+  --scrim-left:       linear-gradient(90deg, rgba(6,6,7,0.94) 0%, rgba(6,6,7,0.7) 40%, rgba(6,6,7,0) 80%); /* @kind other */
+  --scrim-full:       linear-gradient(180deg, rgba(6,6,7,0.55) 0%, rgba(6,6,7,0.75) 100%); /* @kind other */
+
+  /* Subtle gold hairline as a top accent on dark cards */
+  --accent-line: linear-gradient(90deg, transparent, var(--gold-500), transparent); /* @kind other */
+}
+
+
+/* ===== tokens/base.css ===== */
+/* ============================================================
+   HALEX — Base layer
+   Minimal resets + element defaults bound to the brand tokens.
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--text-body);
+  background: var(--surface-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-extra);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-heading);
+  color: var(--text-strong);
+  margin: 0;
+}
+
+p { margin: 0; }
+
+a { color: inherit; text-decoration: none; }
+
+img, svg { display: block; max-width: 100%; }
+
+button { font-family: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--gold-500);
+  color: var(--ink-950);
+}
+
+/* Brand helpers — used across cards & specimens */
+.halex-eyebrow {
+  font-family: var(--font-body);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-eyebrow);
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--text-gold);
+}
+
+.halex-gold { color: var(--text-gold); }
+
+/* Tracked uppercase label */
+.halex-label {
+  font-family: var(--font-body);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  font-size: var(--fs-xs);
+}
+
