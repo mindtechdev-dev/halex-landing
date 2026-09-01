@@ -456,14 +456,58 @@ function Proceso(){
 }
 
 /* TRABAJOS REALES */
+const TRABAJOS=[
+  {
+    id:'canaletas',
+    tab:'Limpieza de canaletas',
+    servicio:'Mantenciones · Techumbres',
+    titulo:'Limpieza de canaletas y sellado impermeabilizante',
+    intro:'Canaleta obstruida con tierra, hojas y raíces que provocaba desborde hacia la techumbre. Se retiró todo el material acumulado, se trató el óxido y se aplicó sellado impermeabilizante en el canal y en la pasada del bajante.',
+    datos:[['Servicio','Limpieza y sellado de canaletas'],['Lugar','Santiago']],
+    fotos:[
+      ['/assets/trabajos/canaleta-despues.jpeg','Antes — canaleta obstruida con tierra y hojas','Antes',false],
+      ['/assets/trabajos/canaleta-sello.jpeg','Proceso — sellado de la pasada del bajante','Proceso',false],
+      ['/assets/trabajos/canaleta-antes.jpeg','Después — canal limpio y sellado','Después',true],
+      ['/assets/trabajos/canaleta-vista.jpeg','Después — cubierta despejada y drenaje libre','Después',true],
+    ],
+    videos:['/assets/trabajos/video-canaleta-1.mp4','/assets/trabajos/video-canaleta-2.mp4'],
+  },
+  {
+    id:'ducto',
+    tab:'Sellado de ducto',
+    servicio:'Techumbres y goteras',
+    titulo:'Reparación y sellado de pasada de ducto',
+    intro:'Sello viejo agrietado en la pasada del ducto, con filtración hacia el interior. Se retiró el sello deteriorado y se instaló una base nueva impermeabilizada sobre la techumbre asfáltica.',
+    datos:[['Servicio','Techumbres y goteras'],['Lugar','Santiago']],
+    fotos:[
+      ['/assets/trabajos/ducto-antes-1.jpeg','Antes — techumbre con sello deteriorado','Antes',false],
+      ['/assets/trabajos/ducto-antes-2.jpeg','Antes — gorro y sello agrietado','Antes',false],
+      ['/assets/trabajos/ducto-proceso.jpeg','Proceso — base nueva impermeabilizada','Proceso',false],
+      ['/assets/trabajos/ducto-despues.jpeg','Después — ducto instalado y sellado','Después',true],
+    ],
+    videos:['/assets/trabajos/video-techumbre-1.mp4','/assets/trabajos/video-techumbre-2.mp4'],
+  },
+  {
+    id:'cobertizo',
+    tab:'Cobertizo en terraza',
+    servicio:'Mantenciones · Pintura',
+    titulo:'Cobertizo con cielo de madera y canaletas',
+    intro:'Estructura metálica de cobertizo sobre terraza, sin terminaciones. Se instaló el cielo de madera machihembrada, se barnizó, se montaron las canaletas con bajante y se pintó el muro. La terraza quedó cubierta y protegida de la lluvia.',
+    datos:[['Servicio','Cobertizo y terminaciones'],['Lugar','Santiago']],
+    fotos:[
+      ['/assets/trabajos/cobertizo-antes.jpeg','Antes — estructura metálica sin terminaciones','Antes',false],
+      ['/assets/trabajos/cobertizo-despues-1.jpeg','Proceso — cielo de madera montado sobre las vigas','Proceso',false],
+      ['/assets/trabajos/cobertizo-proceso.jpeg','Después — cielo barnizado y canaletas instaladas','Después',true],
+      ['/assets/trabajos/cobertizo-despues-2.jpeg','Después — terraza cubierta y terminada','Después',true],
+    ],
+    videos:[],
+  },
+];
+
 function TrabajosReales(){
   const [open,setOpen]=React.useState(false);
-  const fotos=[
-    ['/assets/trabajos/ducto-antes-1.jpeg','Antes — techumbre con sello deteriorado','Antes',false],
-    ['/assets/trabajos/ducto-antes-2.jpeg','Antes — gorro y sello agrietado','Antes',false],
-    ['/assets/trabajos/ducto-proceso.jpeg','Proceso — base nueva impermeabilizada','Proceso',false],
-    ['/assets/trabajos/ducto-despues.jpeg','Después — ducto instalado y sellado','Después',true],
-  ];
+  const [activo,setActivo]=React.useState(0);
+  const t=TRABAJOS[activo];
   return React.createElement(AnimatedDiv,null,
     React.createElement(window.HalexUI.Section,{id:'trabajos',bg:'var(--ink-950)'},
       React.createElement(window.HalexUI.Container,null,
@@ -471,7 +515,7 @@ function TrabajosReales(){
           React.createElement('span',{className:'tr-toggle-text'},
             React.createElement('span',{className:'tr-eyebrow'},'Trabajos'),
             React.createElement('span',{className:'tr-title'},'Trabajos reales, registrados en obra'),
-            React.createElement('span',{className:'tr-hint'},'Ver fotos y videos de obra')
+            React.createElement('span',{className:'tr-hint'},TRABAJOS.length+' trabajos · fotos y videos de obra')
           ),
           React.createElement('span',{className:'tr-chevron','aria-hidden':'true'},
             React.createElement('span',{className:'tr-wave'}),
@@ -481,23 +525,48 @@ function TrabajosReales(){
         ),
         React.createElement('div',{className:'tr-panel'+(open?'':' collapsed'),id:'trPanel'},
           React.createElement('div',null,
-            React.createElement('p',{className:'tr-intro'},'Reparación y sellado de pasada de ducto en techumbre asfáltica. Del sello viejo filtrado a una base nueva impermeabilizada.'),
-            React.createElement('div',{className:'tr-grid'},
-              fotos.map(([src,alt,tag,after])=>
-                React.createElement('figure',{key:src,className:'tr-item'},
-                  React.createElement('img',{src,alt,loading:'lazy'}),
-                  React.createElement('figcaption',{className:'tr-tag'+(after?' tr-tag--after':'')},tag)
+            React.createElement('div',{className:'tr-tabs',role:'tablist'},
+              TRABAJOS.map((x,i)=>
+                React.createElement('button',{key:x.id,type:'button',role:'tab','aria-selected':i===activo,className:'tr-tab'+(i===activo?' is-active':''),onClick:()=>setActivo(i)},
+                  React.createElement('span',{className:'tr-tab-n'},String(i+1).padStart(2,'0')),
+                  x.tab
                 )
               )
             ),
-            React.createElement('div',{className:'tr-videos'},
-              ['/assets/trabajos/video-techumbre-1.mp4','/assets/trabajos/video-techumbre-2.mp4'].map(src=>
-                React.createElement('figure',{key:src,className:'tr-video'},
-                  React.createElement('video',{src,controls:true,preload:'metadata',playsInline:true})
+            React.createElement('div',{className:'tr-case',key:t.id},
+              React.createElement('div',{className:'tr-case-head'},
+                React.createElement('div',null,
+                  React.createElement('span',{className:'tr-case-svc'},t.servicio),
+                  React.createElement('h3',{className:'tr-case-title'},t.titulo),
+                  React.createElement('p',{className:'tr-intro'},t.intro)
+                ),
+                React.createElement('dl',{className:'tr-meta'},
+                  t.datos.map(([k,v])=>React.createElement(React.Fragment,{key:k},
+                    React.createElement('dt',null,k),
+                    React.createElement('dd',null,v)
+                  ))
                 )
+              ),
+              React.createElement('div',{className:'tr-grid'},
+                t.fotos.map(([src,alt,tag,after])=>
+                  React.createElement('figure',{key:src,className:'tr-item'},
+                    React.createElement('img',{src,alt,loading:'lazy'}),
+                    React.createElement('figcaption',{className:'tr-tag'+(after?' tr-tag--after':'')},tag)
+                  )
+                )
+              ),
+              t.videos.length>0 && React.createElement('div',{className:'tr-videos'},
+                t.videos.map(src=>
+                  React.createElement('figure',{key:src,className:'tr-video'},
+                    React.createElement('video',{src,controls:true,preload:'metadata',playsInline:true})
+                  )
+                )
+              ),
+              React.createElement('div',{className:'tr-foot'},
+                React.createElement('p',{className:'tr-note'},'✓ Registro propio de obra · Santiago y alrededores'),
+                React.createElement(_k.WhatsAppButton,{size:'md',phone:WA,message:'Hola HALEX, vi sus trabajos y quiero cotizar uno similar.'},'Cotizar un trabajo similar')
               )
-            ),
-            React.createElement('p',{className:'tr-note'},'✓ Registro propio de obra · Techumbre asfáltica · Santiago')
+            )
           )
         )
       )
