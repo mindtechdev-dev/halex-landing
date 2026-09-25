@@ -234,7 +234,7 @@ const Section = ({ children, bg='var(--surface-page)', id, style={} }) =>
 /* ---------------- NAV ---------------- */
 function Nav(){
   const [open,setOpen]=React.useState(false);
-  const links=[['Inicio','#hero'],['Servicios','#servicios'],['Nosotros','#nosotros'],['Cómo trabajamos','#proceso'],['Contacto','#contacto']];
+  const links=[['Inicio','#hero'],['Servicios','#servicios'],['Nosotros','#nosotros'],['Cómo trabajamos','#proceso'],['Contacto','https://halex.cl/contacto/']];
   return (
     <header style={{position:'sticky',top:0,zIndex:50}}>
       {/* utility bar */}
