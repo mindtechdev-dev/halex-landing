@@ -614,6 +614,7 @@ function Contacto(){
     window.open(`https://wa.me/${WA}?text=${msg}`,'_blank');
   };
   const mailSubmit=(e)=>{
+    if(window.halexConv) window.halexConv('correo');
     const f=e.target.closest('form');
     const body=`Nombre: ${f.nombre.value||'-'}\nTeléfono: ${f.telefono.value||'-'}\nCorreo: ${f.correo.value||'-'}\n\nDescripción del trabajo:\n${f.detalle.value||'-'}`;
     window.location.href=`mailto:${EMAIL}?subject=`+encodeURIComponent('Solicitud de cotización — HALEX')+'&body='+encodeURIComponent(body);

@@ -20,6 +20,36 @@ const links = [
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google tag (gtag.js) -->
+<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=AW-18520884552"></script>
+<script is:inline>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-18520884552');
+</script>
+<!-- Conversiones HALEX: se disparan solo al hacer clic -->
+<script is:inline>
+(function(){
+  var CONV = {
+    whatsapp: 'AW-18520884552/X7KECLyt4qMdEMiKuf9E', // Solicitar cotización
+    correo: ''  // PENDIENTE: pegar aquí la etiqueta de la conversión "Clic en correo" (AW-18520884552/xxxx)
+  };
+  function halexConv(tipo){
+    var id = CONV[tipo];
+    if (!id || typeof gtag !== 'function') return;
+    gtag('event', 'conversion', { send_to: id });
+  }
+  window.halexConv = halexConv;
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a) return;
+    var h = a.getAttribute('href') || '';
+    if (/wa\.me\/|api\.whatsapp\.com/.test(h)) halexConv('whatsapp');
+    else if (/^mailto:/i.test(h)) halexConv('correo');
+  }, true);
+})();
+</script>
 <title>Contacto — HALEX</title>
 <meta name="description" content="Contacta a HALEX: WhatsApp, Instagram, Facebook y correo. Obras menores en construcción y servicios para tu hogar o negocio.">
 <meta name="robots" content="noindex">
