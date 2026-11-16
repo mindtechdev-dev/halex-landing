@@ -90,6 +90,19 @@
   @media(max-width:900px){.rv-grid{grid-template-columns:1fr 1fr}.rv-form{grid-template-columns:1fr;gap:24px}}
   @media(max-width:540px){.rv-grid{grid-template-columns:1fr}.rv-summary{flex-direction:column;align-items:stretch;text-align:center}.rv-score{justify-content:center}.rv-btn{justify-content:center}}
 
+  /* Mobile fixes */
+  html,body{overflow-x:clip}
+  @media (max-width: 760px) {
+    .pt-grid { grid-template-columns: minmax(0,1fr) !important; gap: 32px !important; }
+    .rv-form { grid-template-columns: minmax(0,1fr) !important; }
+    .rv-form > * { min-width: 0; }
+    .pt-grid a { width: 100%; white-space: normal !important; text-align: center; }
+  }
+  @media (max-width: 440px) {
+    .op-faces { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+    .rv-num { font-size: 42px; }
+  }
+
   /* Responsive — mobile-first cascade */
   @media (max-width: 1024px) {
     .nos-grid, .pq-grid, .con-grid { grid-template-columns: 1fr 1fr !important; }
