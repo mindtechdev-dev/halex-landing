@@ -116,10 +116,10 @@ const Icons = {
   menu:   (s)=>_ic(<><path d="M3 6h18M3 12h18M3 18h18"/></>,s),
 };
 
-function ServiceCard({ icon, image, title, description, linkLabel, href, tone='light', style={} }){
+function ServiceCard({ icon, image, title, description, linkLabel, href, quoteHref, tone='light', style={} }){
   const isLight=tone==='light';
   const [hover,setHover]=React.useState(false);
-  return <article onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)} style={{display:'flex',flexDirection:'column',borderRadius:'var(--radius-lg)',overflow:'hidden',background:isLight?'var(--surface-card-light)':'var(--surface-card)',border:`1px solid ${isLight?'var(--line)':(hover?'var(--border-dark-2)':'var(--border-dark)')}`,boxShadow:isLight?(hover?'var(--shadow-lg)':'var(--shadow-sm)'):(hover?'var(--shadow-dark-sm)':'none'),transform:hover?'translateY(-5px)':'none',transition:'transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base), border-color var(--dur-base)',height:'100%',...style}}>
+  return <article onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)} style={{position:'relative',cursor:quoteHref?'pointer':'auto',display:'flex',flexDirection:'column',borderRadius:'var(--radius-lg)',overflow:'hidden',background:isLight?'var(--surface-card-light)':'var(--surface-card)',border:`1px solid ${isLight?'var(--line)':(hover?'var(--border-dark-2)':'var(--border-dark)')}`,boxShadow:isLight?(hover?'var(--shadow-lg)':'var(--shadow-sm)'):(hover?'var(--shadow-dark-sm)':'none'),transform:hover?'translateY(-5px)':'none',transition:'transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base), border-color var(--dur-base)',height:'100%',...style}}>
     <div style={{position:'relative',aspectRatio:'16 / 10',background:'linear-gradient(160deg, var(--ink-800), var(--ink-900))',overflow:'hidden'}}>
       <span aria-hidden="true" style={{position:'absolute',inset:0,backgroundImage:'radial-gradient(circle at 1px 1px, var(--ink-700) 1px, transparent 0)',backgroundSize:'16px 16px',opacity:0.5}}/>
       {image}
@@ -128,7 +128,13 @@ function ServiceCard({ icon, image, title, description, linkLabel, href, tone='l
       <span style={{width:'56px',height:'56px',display:'inline-flex',alignItems:'center',justifyContent:'center',borderRadius:'var(--radius-md)',background:'var(--grad-gold)',color:'var(--text-on-gold)',boxShadow:'var(--glow-gold-sm)',marginBottom:'var(--space-1)'}}>{icon}</span>
       <h3 style={{fontSize:'var(--fs-h4)',fontWeight:'var(--fw-bold)',color:isLight?'var(--text-on-light)':'var(--text-strong)',margin:0}}>{title}</h3>
       {description&&<p style={{fontSize:'var(--fs-sm)',lineHeight:'var(--lh-body)',color:isLight?'var(--text-body-light)':'var(--text-body)',margin:0,textWrap:'pretty'}}>{description}</p>}
-      {linkLabel&&<a href={href||'#'} style={{marginTop:'auto',paddingTop:'var(--space-2)',display:'inline-flex',alignItems:'center',gap:'8px',fontFamily:'var(--font-body)',fontWeight:'var(--fw-bold)',fontSize:'var(--fs-xs)',letterSpacing:'var(--ls-eyebrow)',textTransform:'uppercase',color:'var(--text-gold)'}}>{linkLabel}<span style={{display:'inline-flex',transform:hover?'translateX(3px)':'none',transition:'transform var(--dur-base)'}}>{Icons.arrow(16)}</span></a>}
+      {quoteHref?<React.Fragment>
+        <a href={href} aria-label={'Ver servicio: '+title} style={{position:'absolute',inset:0,zIndex:1}}></a>
+        <div style={{marginTop:'auto',paddingTop:'var(--space-3)',display:'flex',alignItems:'center',justifyContent:'space-between',gap:'12px',flexWrap:'wrap'}}>
+          <span style={{display:'inline-flex',alignItems:'center',gap:'8px',fontFamily:'var(--font-body)',fontWeight:'var(--fw-bold)',fontSize:'var(--fs-xs)',letterSpacing:'var(--ls-eyebrow)',textTransform:'uppercase',color:'var(--text-gold)'}}>{linkLabel||'Ver servicio'}<span style={{display:'inline-flex',transform:hover?'translateX(3px)':'none',transition:'transform var(--dur-base)'}}>{Icons.arrow(16)}</span></span>
+          <a href={quoteHref} target="_blank" rel="noopener noreferrer" style={{position:'relative',zIndex:2,display:'inline-flex',alignItems:'center',gap:'8px',padding:'10px 16px',borderRadius:'999px',background:'var(--whatsapp)',color:'#fff',fontFamily:'var(--font-body)',fontWeight:700,fontSize:'14px',whiteSpace:'nowrap'}}><WaGlyph size={16}/>Cotizar</a>
+        </div>
+      </React.Fragment>:linkLabel&&<a href={href||'#'} style={{marginTop:'auto',paddingTop:'var(--space-2)',display:'inline-flex',alignItems:'center',gap:'8px',fontFamily:'var(--font-body)',fontWeight:'var(--fw-bold)',fontSize:'var(--fs-xs)',letterSpacing:'var(--ls-eyebrow)',textTransform:'uppercase',color:'var(--text-gold)'}}>{linkLabel}<span style={{display:'inline-flex',transform:hover?'translateX(3px)':'none',transition:'transform var(--dur-base)'}}>{Icons.arrow(16)}</span></a>}
     </div>
   </article>;
 }
@@ -234,7 +240,7 @@ const Section = ({ children, bg='var(--surface-page)', id, style={} }) =>
 /* ---------------- NAV ---------------- */
 function Nav(){
   const [open,setOpen]=React.useState(false);
-  const links=[['Inicio','#hero'],['Servicios','#servicios'],['Nosotros','#nosotros'],['Cómo trabajamos','#proceso'],['Contacto','https://halex.cl/contacto/']];
+  const links=[['Inicio','#hero'],['Servicios','#servicios'],['Nosotros','#nosotros'],['Cómo trabajamos','#proceso'],['Trabaja con nosotros','/trabaja-con-nosotros'],['Contacto','https://halex.cl/contacto/']];
   return (
     <header style={{position:'sticky',top:0,zIndex:50}}>
       {/* utility bar */}
@@ -383,18 +389,21 @@ function Nosotros(){
 /* SERVICIOS */
 function Servicios(){
   const svc=[
-    [_k.Icons.roof,'Techumbres y goteras','Detección de filtraciones, cambio de planchas, sellado de techumbres y limpieza de canaletas.','/assets/service-roof.jpg'],
-    [_k.Icons.drop,'Gasfitería','Instalación y reparación de llaves, WC, lavamanos, destapes y reparación de cañerías.','/assets/service-plumbing.jpg'],
-    [_k.Icons.roller,'Pintura interior y exterior','Pintura de muros, fachadas, rejas y portones, con preparación y terminación profesional.','/assets/service-paint.jpg'],
-    [_k.Icons.bolt,'Electricidad menor','Cambio de enchufes, interruptores, luminarias y soluciones eléctricas seguras.','/assets/service-electrical.jpg'],
-    [_k.Icons.tools,'Mantenciones generales','Mantención preventiva y arreglos prácticos para tu hogar, oficina o local comercial.','/assets/service-maintenance.jpg'],
+    [_k.Icons.roof,'Techumbres y goteras','Detección de filtraciones, cambio de planchas, sellado de techumbres y limpieza de canaletas.','/assets/service-roof.jpg','/servicios/techumbres-goteras'],
+    [_k.Icons.drop,'Gasfitería','Instalación y reparación de llaves, WC, lavamanos, destapes y reparación de cañerías.','/assets/service-plumbing.jpg','/servicios/gasfiteria'],
+    [_k.Icons.roller,'Pintura interior y exterior','Pintura de muros, fachadas, rejas y portones, con preparación y terminación profesional.','/assets/service-paint.jpg','/servicios/pintura'],
+    [_k.Icons.bolt,'Electricidad menor','Cambio de enchufes, interruptores, luminarias y soluciones eléctricas seguras.','/assets/service-electrical.jpg','/servicios/electricidad-menor'],
+    [_k.Icons.tools,'Mantenciones generales','Mantención preventiva y arreglos prácticos para tu hogar, oficina o local comercial.','/assets/service-maintenance.jpg','/servicios/mantenciones'],
+    [_k.Icons.bolt,'Electricidad SEC','Tableros, automáticos, diferenciales y regularización de instalaciones según normativa SEC.','/assets/servicios/sec-1.jpg','/servicios/electricidad-sec'],
+    [_k.Icons.drop,'Destape de alcantarillado','Destape de WC, lavaplatos, duchas, cámaras y alcantarillado de patio.','/assets/servicios/destape-1.jpg','/servicios/destape-alcantarillado'],
+    [_k.Icons.search,'Detección de fugas','Encontramos filtraciones y humedades en muros, pisos y cielos, con mínima rotura.','/assets/servicios/fuga-1.jpg','/servicios/deteccion-fugas'],
   ];
   return React.createElement(AnimatedDiv,null,
     React.createElement(window.HalexUI.Section,{id:'servicios',bg:'var(--paper)'},
       React.createElement(window.HalexUI.Container,null,
         React.createElement(_k.SectionHeading,{tone:'light',eyebrow:'Nuestros servicios',title:'Un solo equipo, muchas soluciones',intro:'Cubrimos las reparaciones y mantenciones más frecuentes en casas y negocios. Cotiza el servicio que necesitas y coordinamos el resto.'}),
-        React.createElement('div',{className:'svc-grid',style:{display:'grid',gridTemplateColumns:'repeat(3, 1fr)',gap:'22px',marginTop:'var(--space-12)'}},
-          svc.map(([ic,t,d,img])=>React.createElement(_k.ServiceCard,{key:t,tone:'light',icon:ic(26),image:React.createElement('div',{style:{position:'absolute',inset:0,backgroundImage:`url("${img}")`,backgroundSize:'cover',backgroundPosition:'center'}}),title:t,description:d,linkLabel:'Cotizar',href:`https://wa.me/${WA}?text=`+encodeURIComponent('Hola HALEX, quiero cotizar: '+t)}))
+        React.createElement('div',{className:'svc-grid',style:{display:'grid',gridTemplateColumns:'repeat(4, 1fr)',gap:'20px',marginTop:'var(--space-12)'}},
+          svc.map(([ic,t,d,img,page])=>React.createElement(_k.ServiceCard,{key:t,tone:'light',icon:ic(26),image:React.createElement('div',{style:{position:'absolute',inset:0,backgroundImage:`url("${img}")`,backgroundSize:'cover',backgroundPosition:'center'}}),title:t,description:d,linkLabel:'Ver servicio',href:page,quoteHref:`https://wa.me/${WA}?text=`+encodeURIComponent('Hola HALEX, quiero cotizar: '+t)}))
         )
       )
     )
@@ -511,19 +520,14 @@ function TrabajosReales(){
   return React.createElement(AnimatedDiv,null,
     React.createElement(window.HalexUI.Section,{id:'trabajos',bg:'var(--ink-950)'},
       React.createElement(window.HalexUI.Container,null,
-        React.createElement('button',{className:'tr-toggle',id:'trToggle','aria-expanded':open?'true':'false','aria-controls':'trPanel',onClick:()=>setOpen(o=>!o)},
+        React.createElement('div',{className:'tr-toggle',style:{cursor:'default'}},
           React.createElement('span',{className:'tr-toggle-text'},
             React.createElement('span',{className:'tr-eyebrow'},'Trabajos'),
             React.createElement('span',{className:'tr-title'},'Trabajos reales, registrados en obra'),
-            React.createElement('span',{className:'tr-hint'},TRABAJOS.length+' trabajos · fotos y videos de obra')
-          ),
-          React.createElement('span',{className:'tr-chevron','aria-hidden':'true'},
-            React.createElement('span',{className:'tr-wave'}),
-            React.createElement('span',{className:'tr-wave tr-wave--2'}),
-            React.createElement('span',{className:'tr-arrow'},'→')
+            React.createElement('span',{className:'tr-hint',style:{color:'var(--gray-400)'}},TRABAJOS.length+' trabajos · fotos y videos de obra')
           )
         ),
-        React.createElement('div',{className:'tr-panel'+(open?'':' collapsed'),id:'trPanel'},
+        React.createElement('div',{className:'tr-panel',id:'trPanel'},
           React.createElement('div',null,
             React.createElement('div',{className:'tr-tabs',role:'tablist'},
               TRABAJOS.map((x,i)=>
@@ -601,6 +605,114 @@ function Galeria(){
   );
 }
 
+/* PORTONES ELÉCTRICOS */
+function Portones(){
+  const items=['Reparación y cambio de motor','Ajuste de rieles, ruedas y cremallera','Soldadura y refuerzo de estructura','Controles, fotoceldas y mantención preventiva'];
+  return React.createElement(AnimatedDiv,null,
+    React.createElement(window.HalexUI.Section,{id:'portones',bg:'var(--ink-950)'},
+      React.createElement(window.HalexUI.Container,{className:'pt-grid',style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'56px',alignItems:'center'}},
+        React.createElement('div',{className:'pt-media',style:{position:'relative',borderRadius:'var(--radius-xl)',overflow:'hidden',border:'1px solid var(--border-dark)',boxShadow:'var(--shadow-dark)',aspectRatio:'4 / 5'}},
+          React.createElement('img',{src:'/assets/servicios/portones-1.jpg',alt:'Maestro HALEX reparando un portón metálico',loading:'lazy',style:{width:'100%',height:'100%',objectFit:'cover',display:'block'}}),
+          React.createElement('div',{'aria-hidden':'true',style:{position:'absolute',inset:0,background:'var(--scrim-bottom)',pointerEvents:'none'}}),
+          React.createElement('span',{style:{position:'absolute',left:'20px',bottom:'20px',padding:'8px 14px',borderRadius:'999px',background:'var(--grad-gold)',color:'var(--ink-950)',fontWeight:800,fontSize:'12px',letterSpacing:'.12em',textTransform:'uppercase'}},'Nuevo servicio')
+        ),
+        React.createElement('div',{style:{display:'flex',flexDirection:'column',gap:'var(--space-6)'}},
+          React.createElement(_k.SectionHeading,{tone:'dark',align:'left',eyebrow:'Portones eléctricos',title:'Reparación de portones eléctricos',intro:'Si tu portón se traba, hace ruido o dejó de responder al control, lo revisamos en terreno y lo dejamos funcionando. Trabajamos con portones correderos y batientes de casas, condominios y locales.'}),
+          React.createElement('ul',{style:{listStyle:'none',padding:0,margin:0,display:'grid',gridTemplateColumns:'1fr 1fr',gap:'12px'},className:'pt-list'},
+            items.map(t=>React.createElement('li',{key:t,style:{display:'flex',gap:'12px',alignItems:'flex-start',padding:'16px',borderRadius:'var(--radius-md)',border:'1px solid var(--border-dark)',background:'rgba(255,255,255,.03)',color:'var(--white)',fontWeight:600,fontSize:'15px',lineHeight:1.4}},
+              React.createElement('span',{style:{flexShrink:0,width:'24px',height:'24px',borderRadius:'7px',background:'var(--grad-gold)',color:'var(--ink-950)',display:'inline-flex',alignItems:'center',justifyContent:'center'}},_k.Icons.check(14)),t))
+          ),
+          React.createElement('div',null,React.createElement(_k.WhatsAppButton,{size:'lg',phone:WA,message:'Hola HALEX, necesito reparar un portón eléctrico.'},'Cotizar reparación de portón'))
+        )
+      )
+    )
+  );
+}
+
+/* OPINIONES */
+/* Reseñas: cuando HALEX tenga ficha en Google, pegar aquí el enlace "Pedir reseñas"
+   y copiar las reseñas reales en RESENAS: {nombre, estrellas (1-5), texto, fecha} */
+const GOOGLE_RESENA_URL = '';
+const RESENAS = [];
+
+function Estrellas({n=5,size=18,on=0}){
+  return React.createElement('span',{style:{display:'inline-flex',gap:'2px'},'aria-label':on+' de 5 estrellas'},
+    Array.from({length:n}).map((_,i)=>React.createElement('svg',{key:i,width:size,height:size,viewBox:'0 0 24 24','aria-hidden':'true'},
+      React.createElement('path',{d:'M12 2.5l2.9 6.1 6.6.8-4.9 4.5 1.3 6.6L12 17.3l-5.9 3.2 1.3-6.6L2.5 9.4l6.6-.8z',fill:i<on?'var(--gold-500)':'none',stroke:i<on?'var(--gold-500)':'var(--gray-500)',strokeWidth:1.5,strokeLinejoin:'round'})
+    ))
+  );
+}
+
+function Opiniones(){
+  const [nota,setNota]=React.useState(null);
+  const [txt,setTxt]=React.useState('');
+  const [nom,setNom]=React.useState('');
+  const face=(mouth,eyes)=>React.createElement('svg',{width:44,height:44,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1.7,strokeLinecap:'round',strokeLinejoin:'round','aria-hidden':'true'},React.createElement('circle',{cx:12,cy:12,r:10}),React.createElement('path',{d:mouth}),React.createElement('path',{d:eyes||'M9 9h.01M15 9h.01',strokeWidth:2.6}));
+  const opts=[
+    ['Mala',face('M16 16.5s-1.5-2-4-2-4 2-4 2')],
+    ['Regular',face('M8 15h8')],
+    ['Buena',face('M8.5 14.5s1.3 1.5 3.5 1.5 3.5-1.5 3.5-1.5')],
+    ['Excelente',face('M7.5 13.5s1.5 3 4.5 3 4.5-3 4.5-3')],
+  ];
+  const enviar=()=>{
+    const msg='Hola HALEX, quiero dejar mi opinión.\n\nExperiencia: '+(nota||'-')+'\nNombre: '+(nom.trim()||'-')+'\nComentario: '+(txt.trim()||'-');
+    window.open(`https://wa.me/${WA}?text=`+encodeURIComponent(msg),'_blank');
+  };
+  const prom = RESENAS.length ? (RESENAS.reduce((t,r)=>t+r.estrellas,0)/RESENAS.length) : 0;
+  const irForm=()=>{const f=document.getElementById('op-form');if(f)window.scrollTo({top:f.getBoundingClientRect().top+window.scrollY-100,behavior:'smooth'});};
+  const btnGoogle = GOOGLE_RESENA_URL
+    ? React.createElement('a',{href:GOOGLE_RESENA_URL,target:'_blank',rel:'noopener noreferrer',className:'rv-btn'},React.createElement(Estrellas,{size:16,on:5}),'Califícanos en Google')
+    : React.createElement('button',{type:'button',className:'rv-btn',onClick:irForm},React.createElement(Estrellas,{size:16,on:5}),'Sé el primero en calificarnos');
+  return React.createElement(AnimatedDiv,null,
+    React.createElement(window.HalexUI.Section,{id:'opiniones',bg:'var(--ink-900)'},
+      React.createElement(window.HalexUI.Container,null,
+        React.createElement(_k.SectionHeading,{tone:'dark',eyebrow:'Opiniones',title:'Lo que dicen nuestros clientes',intro:'Reseñas de personas que ya trabajaron con HALEX.'}),
+        React.createElement('div',{className:'rv-summary'},
+          React.createElement('div',{className:'rv-score'},
+            React.createElement('span',{className:'rv-num'},RESENAS.length?prom.toFixed(1).replace('.',','):'–'),
+            React.createElement('div',{style:{display:'flex',flexDirection:'column',gap:'6px'}},
+              React.createElement(Estrellas,{size:22,on:Math.round(prom)}),
+              React.createElement('span',{className:'rv-count'},RESENAS.length?(RESENAS.length+(RESENAS.length===1?' reseña':' reseñas')+' en Google'):'Aún no hay reseñas publicadas')
+            )
+          ),
+          btnGoogle
+        ),
+        RESENAS.length
+          ? React.createElement('div',{className:'rv-grid'},
+              RESENAS.map((r,i)=>React.createElement('article',{key:i,className:'rv-card'},
+                React.createElement('div',{className:'rv-head'},
+                  React.createElement('span',{className:'rv-avatar'},r.nombre.trim().charAt(0).toUpperCase()),
+                  React.createElement('div',null,
+                    React.createElement('b',{className:'rv-name'},r.nombre),
+                    React.createElement('span',{className:'rv-date'},r.fecha||'')
+                  )
+                ),
+                React.createElement(Estrellas,{size:16,on:r.estrellas}),
+                React.createElement('p',{className:'rv-text'},r.texto)
+              ))
+            )
+          : React.createElement('div',{className:'rv-empty'},
+              React.createElement('p',null,'Estamos comenzando y queremos saber cómo lo hicimos. Si ya trabajamos contigo, tu opinión ayuda a otros vecinos a decidir.')
+            ),
+        React.createElement('div',{id:'op-form',className:'rv-form'},
+          React.createElement('div',{className:'rv-form-copy'},
+            React.createElement('h3',null,'¿Cómo fue tu experiencia con HALEX?'),
+            React.createElement('p',null,'Elige una carita y, si quieres, cuéntanos más. Nos llega directo por WhatsApp.')
+          ),
+          React.createElement('div',{style:{display:'flex',flexDirection:'column',gap:'var(--space-5)'}},
+            React.createElement('div',{className:'op-faces',role:'radiogroup','aria-label':'Tu experiencia',style:{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'12px'}},
+              opts.map(([l,ic])=>{const on=nota===l;return React.createElement('button',{key:l,type:'button',role:'radio','aria-checked':on,onClick:()=>setNota(l),style:{display:'flex',flexDirection:'column',alignItems:'center',gap:'10px',padding:'18px 8px',borderRadius:'var(--radius-md)',border:'1.5px solid '+(on?'var(--gold-500)':'var(--border-dark)'),background:on?'rgba(232,182,46,.12)':'transparent',color:on?'var(--gold-500)':'var(--gray-300)',fontFamily:'var(--font-body)',fontWeight:700,fontSize:'14px',cursor:'pointer',transition:'all .2s',transform:on?'translateY(-2px)':'none'}},ic,l);})
+            ),
+            React.createElement(_k.Input,{name:'op-nombre',label:'Tu nombre (opcional)',placeholder:'Ej.: Carolina, Ñuñoa',value:nom,onChange:e=>setNom(e.target.value)}),
+            React.createElement(_k.Input,{name:'op-texto',label:'Tu comentario',multiline:true,rows:3,placeholder:'Cuéntanos cómo fue el trabajo...',value:txt,onChange:e=>setTxt(e.target.value)}),
+            React.createElement(_k.Button,{size:'lg',fullWidth:true,variant:'primary',type:'button',disabled:!nota,onClick:enviar},nota?'Enviar mi opinión':'Elige una carita para continuar')
+          )
+        )
+      )
+    )
+  );
+}
+
 /* CONTACTO */
 function Contacto(){
   const info=[
@@ -654,8 +766,8 @@ function Contacto(){
 /* FOOTER */
 function Footer(){
   const cols=[
-    ['Servicios',['Techumbres y goteras','Gasfitería','Pintura','Electricidad menor','Mantenciones']],
-    ['Empresa',['Quiénes somos','Cómo trabajamos','Galería','Contacto']],
+    ['Servicios',[['Techumbres y goteras','/servicios/techumbres-goteras'],['Gasfitería','/servicios/gasfiteria'],['Electricidad SEC','/servicios/electricidad-sec'],['Destape de alcantarillado','/servicios/destape-alcantarillado'],['Detección de fugas','/servicios/deteccion-fugas'],['Portones eléctricos','#portones']]],
+    ['Empresa',[['Quiénes somos','#nosotros'],['Cómo trabajamos','#proceso'],['Atención al cliente','/solicitud-servicio'],['Trabaja con nosotros','/trabaja-con-nosotros'],['Contacto','https://halex.cl/contacto/']]],
   ];
   return React.createElement('footer',{style:{background:'var(--ink-950)',borderTop:'1px solid var(--border-dark)',paddingTop:'var(--section-y-sm)'}},
     React.createElement(window.HalexUI.Container,null,
@@ -672,7 +784,7 @@ function Footer(){
         cols.map(([h,items])=>
           React.createElement('div',{key:h,style:{display:'flex',flexDirection:'column',gap:'var(--space-3)'}},
             React.createElement('div',{style:{fontFamily:'var(--font-body)',fontWeight:700,fontSize:'12px',letterSpacing:'.16em',textTransform:'uppercase',color:'var(--gold-500)'}},h),
-            items.map(i=>React.createElement('a',{key:i,href:'#',style:{fontSize:'14px',color:'var(--text-muted)'}},i))
+            items.map(([i,h])=>React.createElement('a',{key:i,href:h,style:{fontSize:'14px',color:'var(--text-muted)'}},i))
           )
         ),
         React.createElement('div',{style:{display:'flex',flexDirection:'column',gap:'var(--space-3)'}},
@@ -705,10 +817,12 @@ function App(){
       React.createElement(window.HalexHero),
       React.createElement(Nosotros),
       React.createElement(Servicios),
+      React.createElement(Portones),
       React.createElement(PorQue),
       React.createElement(Proceso),
       React.createElement(TrabajosReales),
       React.createElement(Galeria),
+      React.createElement(Opiniones),
       React.createElement(Contacto)
     ),
     React.createElement(Footer),
